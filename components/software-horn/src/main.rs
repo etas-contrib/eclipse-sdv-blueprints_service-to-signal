@@ -14,8 +14,6 @@
 use clap::Parser;
 use env_logger::Env;
 use log::{debug, error, info, warn};
-use std::path::PathBuf;
-use zenoh::bytes::ZBytes;
 use zenoh::pubsub::Publisher;
 use zenoh::sample::Sample;
 use zenoh::Config;
@@ -24,7 +22,7 @@ use zenoh::Config;
 pub struct Args {
     #[arg(short, long, env = "ZENOH_CONFIG")]
     /// A Zenoh configuration file.
-    config: PathBuf,
+    config: String,
     #[arg(short, long, default_value = "true", env = "IS_SOUND_ENABLED")]
     sound: bool,
 }
@@ -61,20 +59,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     debug!("Waiting for messages on topic: {}", &horn_keyexpr);
 
     while let Ok(sample) = subscriber.recv_async().await {
-        if let Some(value_type) = extract_attachment_as_string(&sample) {
-            if value_type == "targetValue" {
-                match zbytes_to_string(sample.payload()) {
-                    Ok(value) => {
-                        if value == "true" {
-                            info!("activate Horn");
-                            pub_current_status(&publisher, true).await;
-                        } else {
-                            info!("deactivate Horn");
-                            pub_current_status(&publisher, false).await;
-                        }
-                    }
-                    Err(e) => error!("Payload from Zenoh message is not a String: {e}"),
-                }
+        if contains_target_value(&sample) {
+            if let Some(status) = payload_as_bool(&sample) {
+                info!("{}activating horn signal", if status { "" } else { "de" });
+                publish_current_status(&publisher, status).await;
+            } else {
+                error!("Payload from Zenoh message is not a boolean");
             }
         }
     }
@@ -82,7 +72,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-pub async fn pub_current_status(publisher: &Publisher<'_>, status: bool) {
+async fn publish_current_status(publisher: &Publisher<'_>, status: bool) {
     if let Err(e) = publisher
         .put(status.to_string())
         .attachment("currentValue")
@@ -92,12 +82,17 @@ pub async fn pub_current_status(publisher: &Publisher<'_>, status: bool) {
     }
 }
 
-pub fn extract_attachment_as_string(sample: &Sample) -> Option<String> {
+fn contains_target_value(sample: &Sample) -> bool {
     sample
         .attachment()
         .and_then(|a| a.try_to_string().map(|v| v.to_string()).ok())
+        .map_or(false, |v| v == "targetValue")
 }
 
-pub fn zbytes_to_string(zbuf: &ZBytes) -> Result<String, std::str::Utf8Error> {
-    zbuf.try_to_string().map(|v| v.to_string())
+fn payload_as_bool(sample: &Sample) -> Option<bool> {
+    let zbuf = sample.payload();
+    zbuf.try_to_string()
+        .ok()
+        .map(|v| v.to_string())
+        .map(|s| s.parse::<bool>().unwrap_or(false))
 }

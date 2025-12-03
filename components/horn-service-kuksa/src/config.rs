@@ -11,8 +11,6 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 
-use std::path::PathBuf;
-
 use http::Uri;
 use up_transport_zenoh::zenoh_config::{self, Config};
 
@@ -21,7 +19,7 @@ pub struct Args {
     #[arg(short, long, env = "ZENOH_CONFIG", value_name = "PATH")]
     /// A Zenoh configuration file.
     /// If not set, the service uses Zenoh's default configuration.
-    config: Option<PathBuf>,
+    config: Option<String>,
 
     #[arg(long, default_value = "http://127.0.0.1:55556", env = "KUKSA_ADDRESS", value_parser = valid_uri, value_name = "URI")]
     /// The address for the Kuksa Databroker

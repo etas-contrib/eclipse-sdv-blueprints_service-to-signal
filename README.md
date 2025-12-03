@@ -29,7 +29,7 @@ The [_Horn Client_](./components/horn-client/README.md) is an application that i
 
 ### Eclipse Kuksa Databroker
 
-The [Kuksa Databroker](https://github.com/eclipse-kuksa/kuksa-databroker) acts as a vehicle abstraction layer and manages the interaction between applications and vehicle signals defined in the [COVESA Vehicle Signal Specification]((https://github.com/COVESA/vehicle_signal_specification/).
+The [Kuksa Databroker](https://github.com/eclipse-kuksa/kuksa-databroker) acts as a vehicle abstraction layer and manages the interaction between applications and vehicle signals defined in the [COVESA Vehicle Signal Specification](https://github.com/COVESA/vehicle_signal_specification/).
 Consumers of the `kuksa.val.v1` API, implemented by the Kuksa Databroker, can get, subscribe and write to the target or the current value of such a signal within the Kuksa Databroker.
 
 ### ESP32 Activator Provider
@@ -99,7 +99,4 @@ The [kuksa horn service](#horn-service-kuksa) will process these requests and up
 
 ### Optional: Configuring and starting the actuator provider (microcontroller implementation)
 
-If you have the necessary hardware, you can replace the software-based horn with a
-microcontroller-based actuator provider. To configure and build the application for
-the microcontroller, follow the instructions provided for the
-[actuator-provider](./components/actuator-provider/README.md).
+If you have the necessary hardware, you can replace the software-based horn with a microcontroller-based actuator provider. To configure and build the application for the microcontroller, follow the instructions provided for the [actuator-provider](./components/actuator-provider/README.md).

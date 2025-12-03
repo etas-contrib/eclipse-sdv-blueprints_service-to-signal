@@ -23,12 +23,12 @@ edition = "2021"
 
 [workspace.dependencies]
 async-trait = { version = "0.1" }
-chrono = { version = "0.4", default-features = false }
-clap = { version = "4.5.18", features = ["derive", "env"] }
+chrono = { version = "0.4.42", default-features = false }
+clap = { version = "4.5.53", features = ["derive", "env"] }
 horn-proto = { path = "horn-proto" }
-log = { version = "0.4.22" }
-env_logger = { version = "0.11.5" }
-protobuf = { version = "3.5.0" }
-tokio = { version = "1.40.0" }
-up-rust = { version = "0.7.1" }
-up-transport-zenoh = { version = "0.8.0" }
+log = { version = "0.4.29" }
+env_logger = { version = "0.11.8" }
+protobuf = { version = "3.7.2" }
+tokio = { version = "1.48" }
+up-rust = { version = "0.9.0" }
+up-transport-zenoh = { version = "0.9.0" }
