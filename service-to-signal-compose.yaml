@@ -22,7 +22,7 @@ networks:
 services:
   zenoh-router:
     container_name: "zenoh-router"
-    image: eclipse/zenoh:1.0.1
+    image: eclipse/zenoh:1.6.2
     restart: unless-stopped
     ports:
       - "0.0.0.0:7447:7447"
@@ -55,7 +55,7 @@ services:
 
   kuksa-databroker:
     container_name: "kuksa-databroker"
-    image: ghcr.io/eclipse-kuksa/kuksa-databroker:0.5.0
+    image: ghcr.io/eclipse-kuksa/kuksa-databroker:0.6.0
     command: ["--insecure"]
     restart: unless-stopped
     environment:

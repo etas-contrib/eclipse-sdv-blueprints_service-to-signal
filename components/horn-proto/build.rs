@@ -14,13 +14,20 @@
 //extern crate prost_build;
 extern crate protobuf_codegen;
 
-fn main() -> Result<(), Box<dyn std::error::Error>>{
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     protobuf_codegen::Codegen::new()
         .protoc()
         // use vendored protoc instead of relying on user provided protobuf installation
         .protoc_path(&protoc_bin_vendored::protoc_bin_path().unwrap())
         .include("proto/")
-        .inputs(["proto/uprotocol/uoptions.proto", "proto/uservices_options.proto", "proto/units.proto", "proto/google/rpc/status.proto", "proto/vehicle/body/horn/v1/horn_service.proto", "proto/vehicle/body/horn/v1/horn_topics.proto", ])
+        .inputs([
+            "proto/uprotocol/uoptions.proto",
+            "proto/uservices_options.proto",
+            "proto/units.proto",
+            "proto/google/rpc/status.proto",
+            "proto/vehicle/body/horn/v1/horn_service.proto",
+            "proto/vehicle/body/horn/v1/horn_topics.proto",
+        ])
         .cargo_out_dir("uservice")
         .run_from_script();
     Ok(())

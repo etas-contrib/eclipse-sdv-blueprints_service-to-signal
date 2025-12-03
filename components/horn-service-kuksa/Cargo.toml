@@ -22,12 +22,12 @@ async-trait = { workspace = true }
 chrono = { workspace = true }
 clap = { workspace = true }
 horn-proto = { workspace = true }
-kuksa-rust-sdk = "0.1.2"
+kuksa-rust-sdk = "0.2.0 "
 log = { workspace = true }
 env_logger = { workspace = true }
 prost-types = { version = "0.12.6" }
 protobuf = { workspace = true }
-tokio = { workspace = true }
+tokio = { workspace = true, features = ["signal"] }
 up-rust = { workspace = true }
 up-transport-zenoh = { workspace = true }
 # use http version as in kuksa-rust-sdk

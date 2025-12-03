@@ -45,12 +45,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         tokio::spawn(connections::send_to_terminal(rx_kuksa));
     }
 
-    let zenoh_config = args.get_zenoh_config()?;
     UPTransportZenoh::try_init_log_from_env();
     let uri_provider = Arc::new(StaticUriProvider::new("horn-service-kuksa", 0x1C, 1));
     let transport = UPTransportZenoh::builder(uri_provider.get_authority())
         .expect("invalid authority name")
-        .with_config(zenoh_config)
+        .with_config(args.get_zenoh_config()?)
         .build()
         .await
         .map(Arc::new)?;
@@ -72,6 +71,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .register_endpoint(None, DEACTIVATE_HORN_METHOD_ID, deactivate_horn_op)
         .await?;
 
-    std::thread::park();
+    tokio::signal::ctrl_c().await?;
+    info!("Shutting down Horn service");
     Ok(())
 }
